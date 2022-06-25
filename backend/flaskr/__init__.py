@@ -238,40 +238,40 @@ def create_app(test_config=None):
     and shown whether they were correct or not.
     """
 
-    # @app.route("/quizzes", methods=["POST"])
-    # def category_question():
-        
-    #     body = request.get_json()
-    #     # try:
-    #     prev_questions = body.get('previous_questions')
-        
-    #     if prev_questions is None:
-    #         abort(404)
+    @app.route("/quizzes", methods=["POST"])
+    def category_question():
+        try:
+            body = request.get_json()
+            # try:
+            prev_questions = body.get('previous_questions')
+            
+            if prev_questions is None:
+                abort(404)
 
-    #     quiz_category = body.get('quiz_category')['id']
+            quiz_category = body.get('quiz_category')['id']
 
-    #     if (prev_questions is None):
-    #         abort(400)
+            if (prev_questions is None):
+                abort(400)
 
-    #     questions = []
-    #     if quiz_category == 0:
-    #         questions = Question.query.filter(Question.id.notin_(prev_questions)).all()
-    #     else:
-    #         category = Category.query.get(quiz_category)
-    #         if category is None:
-    #             abort(404)
-    #         questions = Question.query.filter(Question.id.notin_(prev_questions), Question.category == quiz_category).all()
-    #         current_question = None
-    #     if (len(questions) > 0):
-    #         index = random.randrange(0, len(questions))
-    #         current_question = questions[index].format()
-    #     return jsonify({
-    #         'success': True,
-    #         'question': current_question,
-    #         'total_questions': len(questions)
-    #     })
-        # except:
-        #     abort(422)
+            questions = []
+            if quiz_category == 0:
+                questions = Question.query.filter(Question.id.notin_(prev_questions)).all()
+            else:
+                category = Category.query.get(quiz_category)
+                if category is None:
+                    abort(404)
+                questions = Question.query.filter(Question.id.notin_(prev_questions), Question.category == quiz_category).all()
+                current_question = None
+            if (len(questions) > 0):
+                index = random.randrange(0, len(questions))
+                current_question = questions[index].format()
+            return jsonify({
+                'success': True,
+                'question': current_question,
+                'total_questions': len(questions)
+            })
+        except:
+            abort(422)
     
     """
     @TODO:

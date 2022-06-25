@@ -42,60 +42,60 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
-    # def test_pagination(self):
-    #     response = self.client().get('/questions')
-    #     data = json.loads(response.data)
+    def test_pagination(self):
+        response = self.client().get('/questions')
+        data = json.loads(response.data)
         
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(data['success'], True)
-    #     self.assertTrue(data['total_questions'])
-    #     self.assertTrue(len(data['questions']))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['total_questions'])
+        self.assertTrue(len(data['questions']))
         
-    # def test_404_invalid_pageNo(self):
-    #     response = self.client().get('/questions?page=50')
-    #     data = json.loads(response.data)
+    def test_404_invalid_pageNo(self):
+        response = self.client().get('/questions?page=50')
+        data = json.loads(response.data)
         
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertEqual(data['success'], False)
-    #     self.assertEqual(data['message'],'resource not found')
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'],'resource not found')
         
-    # def test_delete_Question(self):
-    #     response = self.client().delete('/questions/6')
-    #     data = json.loads(response.data)
+    def test_delete_Question(self):
+        response = self.client().delete('/questions/6')
+        data = json.loads(response.data)
         
-    #     question = Question.query.filter(Question.id == 6).one_or_none()
+        question = Question.query.filter(Question.id == 6).one_or_none()
         
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(data['success'], True)
-    #     self.assertEqual(data['deleted'], 6)
-    #     self.assertTrue(data['total_questions'])
-    #     self.assertTrue(len(data['questions']))
-    #     self.assertEqual(question, None)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['deleted'], 6)
+        self.assertTrue(data['total_questions'])
+        self.assertTrue(len(data['questions']))
+        self.assertEqual(question, None)
     
-    # def test_404_if_doesnt_exist(self):
-    #     response = self.client().delete('/questions/50')
-    #     data = json.loads(response.data)
+    def test_404_if_doesnt_exist(self):
+        response = self.client().delete('/questions/50')
+        data = json.loads(response.data)
         
-    #     self.assertEqual(response.status_code, 422)
-    #     self.assertEqual(data['success'], False)
-    #     self.assertEqual(data['message'], 'unprocessable')
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unprocessable')
     
-    # def test_create_new_trivia_questions(self):
-    #     response = self.client().post('/questions', json = self.new_trivia_questions)
-    #     data = json.loads(response.data)
+    def test_create_new_trivia_questions(self):
+        response = self.client().post('/questions', json = self.new_trivia_questions)
+        data = json.loads(response.data)
         
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(data['success'], True)
-    #     self.assertTrue(data['created'])
-    #     self.assertTrue(len(data['questions']))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['created'])
+        self.assertTrue(len(data['questions']))
     
-    # def test_404_if_trivia_creation_not_allowed(self):
-    #     response = self.client().post('/questions/50', json = self.new_trivia_questions)
-    #     data = json.loads(response.data)
+    def test_404_if_trivia_creation_not_allowed(self):
+        response = self.client().post('/questions/50', json = self.new_trivia_questions)
+        data = json.loads(response.data)
         
-    #     self.assertEqual(response.status_code, 500)
-    #     self.assertEqual(data['success'], False)
-    #     self.assertEqual(data['message'], 'method not allowed')
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'method not allowed')
 
     
     def test_search_Question(self):
