@@ -59,10 +59,10 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'],'resource not found')
         
+        
     def test_delete_Question(self):
         response = self.client().delete('/questions/6')
         data = json.loads(response.data)
-        
         question = Question.query.filter(Question.id == 6).one_or_none()
         
         self.assertEqual(response.status_code, 200)
@@ -72,6 +72,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data['questions']))
         self.assertEqual(question, None)
     
+    
     def test_404_if_doesnt_exist(self):
         response = self.client().delete('/questions/50')
         data = json.loads(response.data)
@@ -79,6 +80,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
+        
     
     def test_create_new_trivia_questions(self):
         response = self.client().post('/questions', json = self.new_trivia_questions)
@@ -89,6 +91,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['created'])
         self.assertTrue(len(data['questions']))
     
+
     def test_404_if_trivia_creation_not_allowed(self):
         response = self.client().post('/questions/50', json = self.new_trivia_questions)
         data = json.loads(response.data)
@@ -101,7 +104,6 @@ class TriviaTestCase(unittest.TestCase):
     def test_search_Question(self):
         response = self.client().post('/questions')
         data = json.loads(response.data)
-        
         # question = Question.query.filter(Question.question == 'Dutch')
         search_result = Question.query.filter(Question.question.ilike('%Dutch%'))
         self.assertEqual(response.status_code, 200)

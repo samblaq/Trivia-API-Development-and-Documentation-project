@@ -138,27 +138,21 @@ def create_app(test_config=None):
     @app.route("/questions", methods=["POST"])
     def create_question():
         body = request.get_json(Question)
-        add_new_question = body.get('question',None)
-        add_new_answer = body.get('answer',None)
-        add_new_difficulty = body.get('difficulty',None)
-        add_new_category = body.get('category',None)
+        add_new_question = body.get("question",None)
+        add_new_answer = body.get("answer",None)
+        add_new_difficulty = body.get("difficulty",None)
+        add_new_category = body.get("category",None)
         
         question = Question(question = add_new_question, answer = add_new_answer, category = add_new_category, difficulty = add_new_difficulty)
         question.insert()
         selection = Question.query.all()
         
-        # categories = Category.query.all()
-        # formatted_category= {cate.id:cate.type for cate in categories}
-            
         questions = pagination_trivia(request,selection)
         return jsonify({
             "success": True,
-            # "question":questions.question,
-            # "question":questions.category,
-            "created": questions,
-            # "categories": formatted_category,
-            "questions": questions
-            # "total_questions": len(selection),
+            "created": question.id,
+            "questions": questions,
+            # "total_questions": len(selection)
         })
 
 
@@ -240,38 +234,61 @@ def create_app(test_config=None):
 
     @app.route("/quizzes", methods=["POST"])
     def category_question():
-        try:
-            body = request.get_json()
-            # try:
-            prev_questions = body.get('previous_questions')
-            
-            if prev_questions is None:
-                abort(404)
-
-            quiz_category = body.get('quiz_category')['id']
-
-            if (prev_questions is None):
-                abort(400)
-
-            questions = []
-            if quiz_category == 0:
-                questions = Question.query.filter(Question.id.notin_(prev_questions)).all()
+        # try:
+        body = request.get_json(Question)
+        prev_question = body.get("previous_questions", None)
+        category = body.get("quiz_category", None)
+        
+        if prev_question and category is None:
+            abort(404)
+        if prev_question is None:
+            if category is None:
+                questions = Question.query.all()
             else:
-                category = Category.query.get(quiz_category)
-                if category is None:
-                    abort(404)
-                questions = Question.query.filter(Question.id.notin_(prev_questions), Question.category == quiz_category).all()
-                current_question = None
-            if (len(questions) > 0):
-                index = random.randrange(0, len(questions))
-                current_question = questions[index].format()
-            return jsonify({
-                'success': True,
-                'question': current_question,
-                'total_questions': len(questions)
-            })
-        except:
-            abort(422)
+                questions = Question.query.filter(Question.category == Category.id, Question.category == category["id"]).all()
+        else:
+            if category is None:
+                questions = Question.query.filter(Question.id.notin_(prev_question)).all()
+            else:
+                questions = Question.query.filter(Question.category == Category.id, Question.category == category["id"], Question.id.notin_(prev_question)).all()
+        
+        formatted_questions = [question.format() for question in questions]
+        total_questions = len(formatted_questions)
+        
+        random_int = random.random(0, total_questions - 1)
+        random_question = formatted_questions[random_int]
+        
+        return jsonify({
+            'success': True,
+            'question': random_question,
+        })
+        #     prev_questions = body.get('previous_questions')
+        #     if prev_questions is None:
+        #         abort(404)
+        #     quiz_category = body.get('quiz_category')['id']
+        #     if (prev_questions is None):
+        #         abort(400)
+        #     questions = []
+        #     if quiz_category == 0:
+        #         questions = Question.query.filter(Question.id.notin_(prev_questions)).all()
+        #     else:
+        #         category = Category.query.get(quiz_category)
+        #         if category is None:
+        #             abort(404)
+        #         questions = Question.query.filter(Question.id.notin_(prev_questions), Question.category == quiz_category).all()
+        #         current_question = None
+        #     if (len(questions) > 0):
+        #         index = random.randrange(0, len(questions))
+        #         current_question = questions[index].format()
+        #     return jsonify({
+        #         'success': True,
+        #         'question': current_question,
+        #         'total_questions': len(questions)
+        #     })
+        # except:
+        #     abort(422)
+        
+        
     
     """
     @TODO:
