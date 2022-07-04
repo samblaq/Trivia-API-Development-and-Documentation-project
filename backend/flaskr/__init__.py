@@ -50,7 +50,8 @@ def create_app(test_config=None):
             
             if categories is None:
                 abort(404)
-            formatted_category = [category.format() for category in categories]
+            # formatted_category = [category.format() for category in categories]
+            formatted_category = {category.id: category.type for category in categories}
             
             return jsonify({
                 "success": True,
@@ -255,7 +256,7 @@ def create_app(test_config=None):
         formatted_questions = [question.format() for question in questions]
         total_questions = len(formatted_questions)
         
-        random_int = random.random(0, total_questions - 1)
+        random_int = random.randrange(0, total_questions - 1)
         random_question = formatted_questions[random_int]
         
         return jsonify({
