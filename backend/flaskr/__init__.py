@@ -79,7 +79,7 @@ def create_app(test_config=None):
             
             categories = Category.query.all()
             # formatted_category = [category.format() for category in categories]
-            formatted_category= {cate.id:cate.type for cate in categories}
+            formatted_category = {category.id: category.type for category in categories}
             # print(selection)
             if selection is None:
                 abort(404)
