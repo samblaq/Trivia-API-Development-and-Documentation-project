@@ -71,6 +71,129 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 
 You will need to provide detailed documentation of your API endpoints including the URL, request parameters, and the response body. Use the example below as a reference.
 
+`GET '/questions'`
+
+- Fetch a list of 10 questions which include a pagination
+- Request Arguments: None
+- Returns: Returns a questions object containing (question, answer, difficulty,category)
+```json
+{
+  "categories":
+    { "1":"Science",
+      "2":"Art",
+      "3":"Geography",
+      "4":"History",
+      "5":"Entertainment",
+      "6":"Sports"
+    },
+  "questions":[
+    { "answer":"Muhammad Ali",
+      "category":4,
+      "difficulty":1,
+      "id":9,
+      "question":"What boxer's original name is Cassius Clay?"
+    }],"success":true,"total_questions":18
+}
+```
+
+`DELETE '/questions/<int:question_id>'`
+- deletes a specific question with reference to the question ID
+- Request Arguments: question_id
+- Returns: Returns the deleted question ID and the len of the remaining questions based on the question ID
+
+```json
+{
+  "deleted":25,
+  "success":true,
+  "total_questions":14
+}
+```
+
+`POST '/questions'`
+- This endpoint post new questions (questions, answer, difficulty,category) into the database
+- Request Arguments: Request values for (questions, answer, difficulty,category) from the body
+- Returns: Returns the newly created question ID, the success message and all the questions in the database
+
+```json
+{
+  "created":27,
+    "questions":[
+      {
+        "answer":"Brazil",
+        "category":6,
+        "difficulty":3,
+        "id":10,
+        "question":"Which is the only team to play in every soccer World Cup tournament?"
+      }
+    ],
+  "success":true
+}
+```
+
+`POST '/questions/search'`
+- Fetches the questions based on the search parameters/term.
+- Request Arguments: Searh Term
+- Returns the value of the search parameter, number of searches, success message and the question details based on the search parameters.
+
+```json
+{
+  "questions":[
+    { "answer":"Lake Victoria",
+      "category":3,
+      "difficulty":2,
+      "id":13,
+      "question":"What is the largest lake in Africa?"
+    }],
+  "search_result":"Africa",
+  "searches":1,
+  "success":true
+}
+```
+
+`GET '/categories/<int:category_id>/questions' `
+- Fetches every question uder the category supplied in the endpoint
+- Returns Arguments: category_id
+- Returns the Catgory ID and the all the questions associated with the category and also the success message and count of the number of questions
+
+```json
+{
+  "category_id":1,
+    "questions":[{
+      "answer":"The Liver",
+      "category":1,
+      "difficulty":4,
+      "id":20,
+      "question":"What is the heaviest organ in the human body?"
+      },
+      {
+      "answer":"Alexander Fleming",
+      "category":1,
+      "difficulty":3,
+      "id":21,
+      "question":"Who discovered penicillin?"}
+      ],
+    "success":true,
+    "total_questions":2
+  }
+```
+
+`POST '/quizzes' `
+- This endpoint feteches random questions based on the category id and the previous questions parameter to play the quiz.
+- Request Arguments: Category and previous question parameters
+- Returns random questions within the given category and the previous question parameters
+
+```json
+{
+  "question":{
+    "answer":"Escher",
+    "category":2,
+    "difficulty":1,
+    "id":16,
+    "question":"Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
+    },
+  "success":true
+}
+```
 ### Documentation Example
 
 `GET '/api/v1.0/categories'`

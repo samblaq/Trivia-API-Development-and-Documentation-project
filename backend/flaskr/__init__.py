@@ -50,7 +50,6 @@ def create_app(test_config=None):
             
             if categories is None:
                 abort(404)
-            # formatted_category = [category.format() for category in categories]
             formatted_category = {category.id: category.type for category in categories}
             
             return jsonify({
@@ -78,9 +77,7 @@ def create_app(test_config=None):
             selection = Question.query.all()
             
             categories = Category.query.all()
-            # formatted_category = [category.format() for category in categories]
             formatted_category = {category.id: category.type for category in categories}
-            # print(selection)
             if selection is None:
                 abort(404)
                 
@@ -119,7 +116,7 @@ def create_app(test_config=None):
             return jsonify({
                 "success": True,
                 "deleted":question_id,
-                "questions": questions,
+                # "questions": question,
                 "total_questions": len(selection),
             })
         except:
@@ -153,7 +150,6 @@ def create_app(test_config=None):
             "success": True,
             "created": question.id,
             "questions": questions,
-            # "total_questions": len(selection)
         })
 
 
@@ -172,14 +168,8 @@ def create_app(test_config=None):
     def get_search():
         search_term = request.args.get('search', None)
         if search_term is not None:
-            # if search_term == '':
-            #     return jsonify({
-            #         "empty": "Please enter a search term"
-            #     })
             search_result = Question.query.filter(Question.question.ilike('%'+search_term+'%'))
             formatted_search= [result.format() for result in search_result]
-            # categories = Category.query.all()
-            # formatted_category= {cate.id:cate.type for cate in categories}
             return jsonify({
                 "success": True,
                 "questions": formatted_search,
@@ -209,8 +199,6 @@ def create_app(test_config=None):
             by_category = Question.query.filter(Question.category == category_id).all()
             
             questions = pagination_trivia(request,by_category)
-            
-            # category_questions= [result.format() for result in by_category]
                 
             return jsonify({
                 "success": True,
@@ -263,33 +251,6 @@ def create_app(test_config=None):
             'success': True,
             'question': random_question,
         })
-        #     prev_questions = body.get('previous_questions')
-        #     if prev_questions is None:
-        #         abort(404)
-        #     quiz_category = body.get('quiz_category')['id']
-        #     if (prev_questions is None):
-        #         abort(400)
-        #     questions = []
-        #     if quiz_category == 0:
-        #         questions = Question.query.filter(Question.id.notin_(prev_questions)).all()
-        #     else:
-        #         category = Category.query.get(quiz_category)
-        #         if category is None:
-        #             abort(404)
-        #         questions = Question.query.filter(Question.id.notin_(prev_questions), Question.category == quiz_category).all()
-        #         current_question = None
-        #     if (len(questions) > 0):
-        #         index = random.randrange(0, len(questions))
-        #         current_question = questions[index].format()
-        #     return jsonify({
-        #         'success': True,
-        #         'question': current_question,
-        #         'total_questions': len(questions)
-        #     })
-        # except:
-        #     abort(422)
-        
-        
     
     """
     @TODO:
