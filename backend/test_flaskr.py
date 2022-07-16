@@ -58,20 +58,18 @@ class TriviaTestCase(unittest.TestCase):
         response = self.client().get('/questions?page=100')
         data = json.loads(response.data)
         
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'],'Not found')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
         
     def test_delete_Question(self):
-        response = self.client().delete('/questions/50')
+        response = self.client().delete('/questions/1')
         data = json.loads(response.data)
-        question = Question.query.filter(Question.id == 50).one_or_none()
+        question = Question.query.filter(Question.id == 1).one_or_none()
         
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted'], 50)
+        self.assertEqual(data['deleted'], 1)
         self.assertTrue(data['total_questions'])
-        self.assertTrue(len(data['questions']))
         self.assertEqual(question, None)
     
     def test_404_if_doesnt_exist(self):
@@ -148,7 +146,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data['success'], False)
         self.assertTrue(data['error'], 400)
-        self.assertTrue(data['message'], 'Bad Request')
+        self.assertTrue(data['message'], 'Bad request')
     
 # Make the tests conveniently executable
 if __name__ == "__main__":
